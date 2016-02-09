@@ -21,6 +21,7 @@ public class Main {
         MapNode H = new MapNode("Hector");
         MapNode I = new MapNode("Indigo");
         MapNode J = new MapNode("Jason");
+        MapNode K = new MapNode("Kliff");
 
         MapEdge ab = new MapEdge(A,B,3);
         MapEdge bc = new MapEdge(B,C,10);
@@ -32,7 +33,10 @@ public class Main {
         MapEdge gh = new MapEdge(G,H,6);
         MapEdge gi = new MapEdge(G,I,10);
         MapEdge hi = new MapEdge(H,I,7);
+        MapEdge hj = new MapEdge(H,J,4); //NEW
+        MapEdge hk = new MapEdge(H,K,3); //NEW
         MapEdge ij = new MapEdge(I,J,4);
+        MapEdge jk = new MapEdge(J,K,1);
 
         //this is a one way path
         A.addPath(ab);
@@ -45,28 +49,43 @@ public class Main {
         G.addPath(gh);
         G.addPath(gi);
         H.addPath(hi);
-        H.addPath(ij);
+        H.addPath(hj);
+        H.addPath(hk);
+        I.addPath(ij);
+        J.addPath(jk);
 
-
-
-        //printRoute(ab);
-        //printRoutes(B);
-        Path p = new Path();
-//        p.addNode(A);
-//        p.addNode(B);
-//        p.addNode(C);
-//        p.printPath();
-        p.addNode(A);
-        p = DFS(A, G, p);
-        if (p!= null) {
-            p.printPath();
-        } else {
-            System.out.println("Couldn't find route");
-        }
-
+        generateTree(A, 11).print();
         return A;
 
     }
+
+    private Tree generateTree(MapNode n, int depth){
+       return generateTree(new Tree(n),n,depth,0);
+    }
+    private Tree generateTree(Tree t, MapNode n, int depth, int curDepth){
+        curDepth = curDepth +1;
+        if (curDepth >= depth) return null;
+
+        try {
+            for (int i=0; i<n.getRoutes().size()-1; i++){
+                MapEdge e = n.getRoutes().get(i);
+                Tree nt = new Tree(e.getConnection(n),e.getWeight());
+                t.addChild(nt);
+                generateTree(nt, e.getConnection(n), depth, curDepth);
+            }
+
+            if(n.getRoutes().size() > 0 ) {
+                MapEdge e = n.getRoutes().get(n.getRoutes().size() -1);
+                Tree nt = new Tree(e.getConnection(n),e.getWeight());
+                t.addChild(nt);
+                generateTree(nt, e.getConnection(n), depth, curDepth);
+            }
+        } catch (Exception e) {
+           // e.printStackTrace();
+        }
+        return t;
+    }
+
 
     private void printRoute(MapEdge edge){
         System.out.printf("N: %s <--> %s : W: %d\n", edge.getPointA().getData(),
@@ -78,44 +97,9 @@ public class Main {
         }
     }
 
-//    private Path DFS(MapNode start, MapNode dest, Path path){
-//        Tree exploreTree = new Tree(null);
-//
-//        for(MapEdge edge: start.getRoutes()){
-//            exploreTree.addChild( new Tree(edge.getConnection(start)) );
-//        }
-//
-//        for (Tree t : exploreTree.getLeaves()   ){
-//            if (t.getNode() == dest) {
-//                return path;
-//            } else{
-//                path.addNode(t.getNode());
-//                printRoutes(t.getNode());
-//                DFS(t.getNode(), dest, path);
-//            }
-//
-//        }
-//        return null;
-//    }
+    private void BFS(Tree root, int depth, int curDepth){
+        for
 
-
-    private Path DFS(MapNode start, MapNode dest, Path path){
-        for(MapEdge edge: start.getRoutes()){
-                MapNode n = edge.getConnection(start);
-                if (n == dest) {
-                    return path;
-                } else{
-                    path.addNode(n);
-                   // printRoutes(n);
-                    return DFS(n, dest, path);
-                }
-
-            }
-        return null;
-        }
-
-
-
-
+    }
 
 }
