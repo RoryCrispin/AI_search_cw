@@ -28,7 +28,7 @@ public class Tree {
         this.leaves.add(child);
     }
 
-    public List<Tree> getChildren(){
+    public List<Tree> getLeaves(){
         return this.leaves;
     }
 

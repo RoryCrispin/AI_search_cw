@@ -1,5 +1,3 @@
-import java.util.Map;
-
 public class Main {
 
     public static void main(String[] args) {
@@ -54,7 +52,10 @@ public class Main {
         I.addPath(ij);
         J.addPath(jk);
 
-        generateTree(A, 11).print();
+        Tree t = generateTree(A, 11);
+        t.print();
+        BFS(t, I, 10).printPath();
+
         return A;
 
     }
@@ -97,9 +98,48 @@ public class Main {
         }
     }
 
-    private void BFS(Tree root, int depth, int curDepth){
-        for
+        private Path BFS(Tree t, MapNode dest, int depth){
+            Path path = new Path();
+            return BFS(t, dest, depth, path);
+    }
+
+//    private Path BFS(Tree root, MapNode dest, int depth, int curDepth, Path path){
+//        curDepth ++;
+//        if (curDepth >= depth){
+//            return null;
+//        }
+//        for(Tree tnode : root.getLeavesAtDepth(curDepth)){
+//            path.addNode(tnode.getNode());
+//            if (tnode.getNode() == dest) {
+//                path.addNode(tnode.getNode());
+//                return path;
+//            } else {
+//                Path x = BFS(tnode, dest, depth, 0, path);
+//                if (x!=null) return x;
+//            }
+//        }
+//        return null;
+//
+//    }
+
+
+    private Path BFS(Tree root, MapNode dest, int depth, Path path){
+        if (root.getNode() == dest) {
+            return path;
+        }
+        for (int i=0; i<root.getLeaves().size() -1; i++){
+            Tree nt = root.getLeaves().get(i);
+            path.addNode(nt.getNode());
+            BFS(nt, dest, depth, path);
+        }
+        if (root.getLeaves().size() >0) {
+            Tree nt = root.getLeaves().get(root.getLeaves().size() -1);
+            path.addNode(nt.getNode());
+            BFS(nt, dest, depth, path);
+        }
+        return null;
 
     }
+
 
 }
